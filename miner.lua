@@ -205,18 +205,22 @@ function emptyItems()
     turtle.suck()
     turtle.refuel()
     fuelslot = turtle.getItemDetail(16)
-    if fuelslot["name"] == "minecraft:bucket" then
-        turtle.turnRight()
-        turtle.drop()
-        turtle.turnLeft()
+    if fuelslot ~= nil then
+        if fuelslot["name"] == "minecraft:bucket" then
+            turtle.turnRight()
+            turtle.drop()
+            turtle.turnLeft()
+        end
     end
     turtle.suck()
     turtle.refuel()
     fuelslot = turtle.getItemDetail(16)
-    if fuelslot["name"] == "minecraft:bucket" then
-        turtle.turnRight()
-        turtle.drop()
-        turtle.turnLeft()
+    if fuelslot ~= nil then
+        if fuelslot["name"] == "minecraft:bucket" then
+            turtle.turnRight()
+            turtle.drop()
+            turtle.turnLeft()
+        end
     end
     turtle.turnRight()
     turtle.turnRight()
