@@ -40,13 +40,14 @@ if fs.exists("/mconfig/hook.txt") then
     config1 = fs.open("/mconfig/hook.txt", "r")
     hookURL = config1.readAll()
     if hookURL == "false" then
-        disablehook = true
+        enablehook = false
     else
         local success, hook = DH.createWebhook(hookURL)
         hook.send("**Turtle Miner Hook successfully connected! ID:** __"..os.getComputerID().."__")
         if not success then
             error("Webhook connection failed! Reason: " .. hook)
         end
+        enablehook = true
     end
 end
 
@@ -82,7 +83,7 @@ function log(x)
     logfile = fs.open("/log/latest.txt", "a")
     logfile.write("["..logN.."] "..x.."\n")
     logfile.close()
-    if not disablehook == "false" then
+    if enablehook then
         hook.send("["..logN.."] "..x, "Mining Turtle "..os.getComputerID())
     end
     logN = logN+1
@@ -346,7 +347,7 @@ if result1 == "y" then
                 os.sleep(1)
                 if turtle.getFuelLevel() < fuelmax/16 then
                     turtle.turnRight()
-                    if not disablehook == "false" then
+                    if enablehook then
                     hook.send("<@"..dcID.."> **Your turtle with ID:** __"..os.getComputerID().."__ **Ran out of fuel.**")
                     end
                     os.reboot()
