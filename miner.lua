@@ -338,6 +338,7 @@ if result1 == "y" then
                     turtle.turnRight()
                     if disablehook ~= "false" then
                     hook.send("<@"..dcID.."> Your turtle with ID: "..os.getComputerID().." Has run out of fuel.")
+                    end
                     os.reboot()
                 end
             end
