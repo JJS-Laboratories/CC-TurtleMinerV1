@@ -9,7 +9,7 @@ if args[1] == "reset" then
     print("Successfully deleted config!")
     os.sleep(1)
 end
-
+enablehook = false
 if fs.exists("/DiscordHook.lua") then
     DH = require("DiscordHook")
 else
@@ -42,11 +42,11 @@ if fs.exists("/mconfig/hook.txt") then
     if hookURL == "false" then
         enablehook = false
     else
-        local success, hook = DH.createWebhook(hookURL)
-        hook.send("**Turtle Miner Hook successfully connected! ID:** __"..os.getComputerID().."__")
+        success, hook = DH.createWebhook(hookURL)
         if not success then
             error("Webhook connection failed! Reason: " .. hook)
         end
+        hook.send("**Turtle Miner Hook successfully connected! ID:** "..os.getComputerID())
         enablehook = true
     end
 end
@@ -203,8 +203,6 @@ function emptyItems()
     turtle.turnLeft()
     turtle.select(16)
     turtle.suck()
-    turtle.turnRight()
-    turtle.turnRight()
     turtle.refuel()
     fuelslot = turtle.getItemDetail(16)
     if fuelslot["name"] == "minecraft:bucket" then
@@ -212,6 +210,16 @@ function emptyItems()
         turtle.drop()
         turtle.turnRight()
     end
+    turtle.suck()
+    turtle.refuel()
+    fuelslot = turtle.getItemDetail(16)
+    if fuelslot["name"] == "minecraft:bucket" then
+        turtle.turnLeft()
+        turtle.drop()
+        turtle.turnRight()
+    end
+    turtle.turnRight()
+    turtle.turnRight()
     turtle.select(1)
 end
 function returnHome()
