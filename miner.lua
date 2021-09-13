@@ -206,17 +206,17 @@ function emptyItems()
     turtle.refuel()
     fuelslot = turtle.getItemDetail(16)
     if fuelslot["name"] == "minecraft:bucket" then
-        turtle.turnLeft()
-        turtle.drop()
         turtle.turnRight()
+        turtle.drop()
+        turtle.turnLeft()
     end
     turtle.suck()
     turtle.refuel()
     fuelslot = turtle.getItemDetail(16)
     if fuelslot["name"] == "minecraft:bucket" then
-        turtle.turnLeft()
-        turtle.drop()
         turtle.turnRight()
+        turtle.drop()
+        turtle.turnLeft()
     end
     turtle.turnRight()
     turtle.turnRight()
