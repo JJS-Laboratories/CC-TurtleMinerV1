@@ -352,6 +352,8 @@ if result1 == "y" then
             if turtle.getFuelLevel() < fuelmax/16 then
                 log("-- Low Fuel! Refueling enabled. --")
                 emptyItems()
+                fuel1 = turtle.getFuelLevel()
+                log("Refueled! new fuel level: "..fuel1)
                 os.sleep(1)
                 if turtle.getFuelLevel() < fuelmax/16 then
                     turtle.turnRight()
@@ -360,6 +362,7 @@ if result1 == "y" then
                     end
                     os.reboot()
                 end
+                returnWork()
             end
             mineFront(15)
             changeRow(1)
