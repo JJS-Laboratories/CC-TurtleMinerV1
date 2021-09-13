@@ -1,6 +1,18 @@
 local fuel = turtle.getFuelLevel()
 local fuelmax = turtle.getFuelLimit()
 
+if fs.exists("/DiscordHook.lua") then
+    DH = require("DiscordHook")
+else
+    shell.run("wget https://raw.githubusercontent.com/Wendelstein7/DiscordHook-CC/master/DiscordHook.lua DiscordHook.lua")
+    DH = require("DiscordHook")
+end
+
+local success, hook = DH.createWebhook("https://discord.com/api/webhooks/886860953222795295/u84r1wuBP-dvvp_cRl8UCO-pcij8ntbW2wqW2bL0JQOhjINSxtgzbw72Xu_XEBE2KocK")
+if not success then
+    error("Webhook connection failed! Reason: " .. hook)
+end
+
 logN = 1
 
 if not fs.exists("/log") then
@@ -28,6 +40,14 @@ function log(x)
     logfile = fs.open("/log/latest.txt", "a")
     logfile.write("["..logN.."] "..x.."\n")
     logfile.close()
+    hook.send("["..logN.."] "..x, "Mining Turtle "..os.getComputerID())
+    logN = logN+1
+end
+function logcd(x)
+    print("["..logN.."] "..x)
+    logfile = fs.open("/log/latest.txt", "a")
+    logfile.write("["..logN.."] "..x.."\n")
+    logfile.close()
     logN = logN+1
 end
 
@@ -40,7 +60,7 @@ function mineFront(x1)
         turtle.forward()
         i = i+1
         RX = RX+1
-        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+        logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
         os.sleep(0.25)
     until i == x1
 end
@@ -54,7 +74,7 @@ function mineFront3(x1)
         turtle.forward()
         i = i+1
         RZ = RZ-1
-        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+        logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
         os.sleep(0.25)
     until i == x1
 end
@@ -68,7 +88,7 @@ function mineFront2(x1)
         turtle.forward()
         i = i+1
         RX = RX-1
-        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+        logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
         os.sleep(0.25)
     until i == x1
 end
@@ -81,7 +101,7 @@ function changeRow(x1)
     turtle.forward()
     turtle.turnRight()
     RZ = RZ+1
-    log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+    logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
 end
 function changeRow2(x1)
     log("Changing Row (2)")
@@ -91,7 +111,7 @@ function changeRow2(x1)
     turtle.forward()
     turtle.turnLeft()
     RZ = RZ+1
-    log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+    logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
 end
 function emptyItems()
     local iz = 0
@@ -101,7 +121,7 @@ function emptyItems()
         repeat
             turtle.forward()
             iz = iz+1
-            log(iz.."/"..RZ)
+            logcd(iz.."/"..RZ)
         until iz == RZ
         turtle.turnRight()
     end
@@ -111,7 +131,7 @@ function emptyItems()
         repeat
             turtle.back()
             ix = ix+1
-            log(ix.."/"..RX)
+            logcd(ix.."/"..RX)
         until ix == RX
     end
     local iy = 0
@@ -120,7 +140,7 @@ function emptyItems()
         repeat
             turtle.up()
             iy = iy-1
-            log(iy.."/"..RY)
+            logcd(iy.."/"..RY)
         until iy == RY
     end
     turtle.turnLeft()
@@ -157,7 +177,7 @@ function returnHome()
         repeat
             turtle.forward()
             iz = iz+1
-            log(iz.."/"..RZ)
+            logcd(iz.."/"..RZ)
         until iz == RZ
         turtle.turnRight()
     end
@@ -167,7 +187,7 @@ function returnHome()
         repeat
             turtle.back()
             ix = ix+1
-            log(ix.."/"..RX)
+            logcd(ix.."/"..RX)
         until ix == RX
     end
     local iy = 0
@@ -176,7 +196,7 @@ function returnHome()
         repeat
             turtle.up()
             iy = iy-1
-            log(iy.."/"..RY)
+            logcd(iy.."/"..RY)
         until iy == RY
     end
     os.reboot()
@@ -192,7 +212,7 @@ function returnWork()
         repeat
             turtle.down()
             iy2 = iy2-1
-            log(iy2.."/"..RY)
+            logcd(iy2.."/"..RY)
         until iy2 == RY
     end
     if RX ~= 0 then
@@ -200,7 +220,7 @@ function returnWork()
         repeat
             turtle.forward()
             ix2 = ix2+1
-            log(ix2.."/"..RX)
+            logcd(ix2.."/"..RX)
         until ix2 == RX
     end
     if RZ ~= 0 then
@@ -209,7 +229,7 @@ function returnWork()
         repeat
             turtle.forward()
             iz2 = iz2+1
-            log(iz2.."/"..RZ)
+            logcd(iz2.."/"..RZ)
         until iz2 == RZ
         turtle.turnLeft()
     end
@@ -219,18 +239,18 @@ RX = 0
 RY = 0
 RZ = 0
 
-log("\nTurtle fuel is "..fuel.."/"..fuelmax.."\n(Refuel threshold is "..(fuelmax/16)..")")
+log("Turtle fuel is "..fuel.."/"..fuelmax.." (Refuel threshold is "..(fuelmax/16)..")")
 os.sleep(0.25)
 
 if fuel < (fuelmax/1) then
     turtle.select(16)
     local fuelslot = turtle.getItemDetail(16)
     if fuelslot ~= nil then
-    log("\nItem in Fuel Slot! : "..fuelslot["name"].."\n Attempting to refuel..")
+    log("Item in Fuel Slot! : "..fuelslot["name"].." Attempting to refuel..")
     turtle.refuel()
     os.sleep(0.25)
     local fuel = turtle.getFuelLevel()
-    log("\nTurtle fuel is now "..fuel.."/"..fuelmax)
+    log("Turtle fuel is now "..fuel.."/"..fuelmax)
     end
 end
 
@@ -238,16 +258,18 @@ turtle.select(1)
 
 os.sleep(0.25)
 
-log("\n Engage Miner? (y/n)")
+log("Engage Miner? (y/n)")
 result1 = io.read()
+log("User Input: "..result1)
 if result1 == "y" then
     log("Starting!")
-    log("\n Y Offset: ")
+    log("Y Offset: ")
     result2 = io.read()
+    log("User Input: "..result2)
     turtle.digDown()
     turtle.down()
     RY = RY-1
-    log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+    logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
     offset1 = 0
     if result2 ~= nil and tonumber(result2) ~= 0 then
         log("Offsetting..")
@@ -257,7 +279,7 @@ if result1 == "y" then
                 turtle.down()
                 offset1 = offset1+1
                 RY = RY-1
-                log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+                logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
             until offset1 == tonumber(result2)-1
         else
             turtle.digDown()
@@ -312,6 +334,6 @@ if result1 == "y" then
         turtle.digDown()
         turtle.down()
         RY = RY-1
-        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+        logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
     until breakloop2 == true
 end
