@@ -40,9 +40,25 @@ function mineFront(x1)
         turtle.forward()
         i = i+1
         RX = RX+1
+        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
         os.sleep(0.25)
     until i == x1
 end
+
+function mineFront3(x1)
+    i = 0
+    log("Mining forward: "..x1-i.." "..i1.."/8 Done")
+    repeat
+        turtle.dig()
+        turtle.digUp()
+        turtle.forward()
+        i = i+1
+        RZ = RZ-1
+        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+        os.sleep(0.25)
+    until i == x1
+end
+
 function mineFront2(x1)
     i = 0
     log("Mining forward (return): "..x1-i.." "..i1.."/8 Done")
@@ -52,6 +68,7 @@ function mineFront2(x1)
         turtle.forward()
         i = i+1
         RX = RX-1
+        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
         os.sleep(0.25)
     until i == x1
 end
@@ -64,6 +81,7 @@ function changeRow(x1)
     turtle.forward()
     turtle.turnRight()
     RZ = RZ+1
+    log("X:"..RX.." Y:"..RY.." Z:"..RZ)
 end
 function changeRow2(x1)
     log("Changing Row (2)")
@@ -73,10 +91,12 @@ function changeRow2(x1)
     turtle.forward()
     turtle.turnLeft()
     RZ = RZ+1
+    log("X:"..RX.." Y:"..RY.." Z:"..RZ)
 end
 function emptyItems()
     local iz = 0
     if RZ ~= 0 then
+        log("Moving Z..")
         turtle.turnLeft()
         repeat
             turtle.forward()
@@ -87,7 +107,7 @@ function emptyItems()
     end
     local ix = 0
     if RX ~= 0 then
-        
+        log("Moving X..")
         repeat
             turtle.back()
             ix = ix+1
@@ -96,6 +116,7 @@ function emptyItems()
     end
     local iy = 0
     if RY ~= 0 then
+        log("Moving Y..")
         repeat
             turtle.up()
             iy = iy-1
@@ -110,7 +131,7 @@ function emptyItems()
         i3 = i3+1
     until i3 == 16
     if turtle.getItemDetail(13) ~= nil then
-        log("Failed to empty inventory.. Stopping!")
+        log("---- Failed to empty inventory.. Stopping! ----")
         os.reboot()
     end 
 
@@ -131,6 +152,7 @@ end
 function returnHome()
     local iz = 0
     if RZ ~= 0 then
+        log("Moving Z..")
         turtle.turnLeft()
         repeat
             turtle.forward()
@@ -141,7 +163,7 @@ function returnHome()
     end
     local ix = 0
     if RX ~= 0 then
-        
+        log("Moving X..")
         repeat
             turtle.back()
             ix = ix+1
@@ -150,6 +172,7 @@ function returnHome()
     end
     local iy = 0
     if RY ~= 0 then
+        log("Moving Y..")
         repeat
             turtle.up()
             iy = iy-1
@@ -165,6 +188,7 @@ function returnWork()
     local iz2 = 0
     local RY2 = RY
     if RY ~= 0 then
+        log("Moving Y..")
         repeat
             turtle.down()
             iy2 = iy2-1
@@ -172,6 +196,7 @@ function returnWork()
         until iy2 == RY
     end
     if RX ~= 0 then
+        log("Moving X..")
         repeat
             turtle.forward()
             ix2 = ix2+1
@@ -179,6 +204,7 @@ function returnWork()
         until ix2 == RX
     end
     if RZ ~= 0 then
+        log("Moving Z..")
         turtle.turnRight()
         repeat
             turtle.forward()
@@ -221,15 +247,22 @@ if result1 == "y" then
     turtle.digDown()
     turtle.down()
     RY = RY-1
+    log("X:"..RX.." Y:"..RY.." Z:"..RZ)
     offset1 = 0
-    if result2 ~= nil then
+    if result2 ~= nil and tonumber(result2) ~= 0 then
         log("Offsetting..")
-        repeat
+        if tonumber(result2) > 1 then
+            repeat
+                turtle.digDown()
+                turtle.down()
+                offset1 = offset1+1
+                RY = RY-1
+                log("X:"..RX.." Y:"..RY.." Z:"..RZ)
+            until offset1 == tonumber(result2)-1
+        else
             turtle.digDown()
             turtle.down()
-            offset1 = offset1+1
-            RY = RY-1
-        until offset1 == tonumber(result2)-1
+        end
         log("Offsetting Done!")
     end
     repeat
@@ -246,6 +279,7 @@ if result1 == "y" then
                 emptyItems()
                 os.sleep(1)
                 if turtle.getFuelLevel() < fuelmax/16 then
+                    turtle.turnRight()
                     os.reboot()
                 end
             end
@@ -271,12 +305,13 @@ if result1 == "y" then
             emptyItems()
             break
         end
-        log("--- Done one layer! Lowering.. ---".." (Height:"..RY..")")
+        log("---- Done one layer! Lowering.. ----".." (Height:"..RY..")")
         turtle.turnLeft()
-        mineFront(16)
+        mineFront3(16)
         turtle.turnRight()
         turtle.digDown()
         turtle.down()
         RY = RY-1
+        log("X:"..RX.." Y:"..RY.." Z:"..RZ)
     until breakloop2 == true
 end
