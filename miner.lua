@@ -1,6 +1,15 @@
 local fuel = turtle.getFuelLevel()
 local fuelmax = turtle.getFuelLimit()
 
+local args = {...}
+
+if args[1] == "reset" then
+    fs.delete("/mconfig/hook.txt")
+    fs.delete("/mconfig/id.txt")
+    print("Successfully deleted config!")
+    os.sleep(1)
+end
+
 if fs.exists("/DiscordHook.lua") then
     DH = require("DiscordHook")
 else
@@ -34,6 +43,7 @@ if fs.exists("/mconfig/hook.txt") then
         disablehook = true
     else
         local success, hook = DH.createWebhook(hookURL)
+        hook.send("**Turtle Miner Hook successfully connected! ID:** __"..os.getComputerID().."__")
         if not success then
             error("Webhook connection failed! Reason: " .. hook)
         end
@@ -72,7 +82,7 @@ function log(x)
     logfile = fs.open("/log/latest.txt", "a")
     logfile.write("["..logN.."] "..x.."\n")
     logfile.close()
-    if disablehook ~= "false" then
+    if not disablehook == "false" then
         hook.send("["..logN.."] "..x, "Mining Turtle "..os.getComputerID())
     end
     logN = logN+1
@@ -87,7 +97,7 @@ end
 
 function mineFront(x1)
     i = 0
-    log("Mining forward: "..x1-i.." "..i1.."/8 Done")
+    logcd("Mining forward: "..x1-i.." "..i1.."/8 Done")
     repeat
         turtle.dig()
         turtle.digUp()
@@ -101,7 +111,7 @@ end
 
 function mineFront3(x1)
     i = 0
-    log("Mining forward: "..x1-i.." "..i1.."/8 Done")
+    logcd("Mining forward: "..x1-i.." "..i1.."/8 Done")
     repeat
         turtle.dig()
         turtle.digUp()
@@ -115,7 +125,7 @@ end
 
 function mineFront2(x1)
     i = 0
-    log("Mining forward (return): "..x1-i.." "..i1.."/8 Done")
+    logcd("Mining forward (return): "..x1-i.." "..i1.."/8 Done")
     repeat
         turtle.dig()
         turtle.digUp()
@@ -128,7 +138,7 @@ function mineFront2(x1)
 end
 
 function changeRow(x1)
-    log("Changing Row (1)")
+    logcd("Changing Row (1)")
     turtle.turnRight()
     turtle.dig()
     turtle.digUp()
@@ -138,7 +148,7 @@ function changeRow(x1)
     logcd("X:"..RX.." Y:"..RY.." Z:"..RZ)
 end
 function changeRow2(x1)
-    log("Changing Row (2)")
+    logcd("Changing Row (2)")
     turtle.turnLeft()
     turtle.dig()
     turtle.digUp()
@@ -336,8 +346,8 @@ if result1 == "y" then
                 os.sleep(1)
                 if turtle.getFuelLevel() < fuelmax/16 then
                     turtle.turnRight()
-                    if disablehook ~= "false" then
-                    hook.send("<@"..dcID.."> Your turtle with ID: "..os.getComputerID().." Has run out of fuel.")
+                    if not disablehook == "false" then
+                    hook.send("<@"..dcID.."> **Your turtle with ID:** __"..os.getComputerID().."__ **Ran out of fuel.**")
                     end
                     os.reboot()
                 end
@@ -364,7 +374,7 @@ if result1 == "y" then
             emptyItems()
             break
         end
-        log("---- Done one layer! Lowering.. ----".." (Height:"..RY..")")
+        log("---- Done one layer! Lowering.. ----".." Current Coords: X:"..RX.." Y:"..RY.." Z:"..RZ)
         turtle.turnLeft()
         mineFront3(16)
         turtle.turnRight()
