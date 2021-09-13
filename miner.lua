@@ -8,9 +8,41 @@ else
     DH = require("DiscordHook")
 end
 
-local success, hook = DH.createWebhook("https://discord.com/api/webhooks/886860953222795295/u84r1wuBP-dvvp_cRl8UCO-pcij8ntbW2wqW2bL0JQOhjINSxtgzbw72Xu_XEBE2KocK")
-if not success then
-    error("Webhook connection failed! Reason: " .. hook)
+if not fs.exists("/mconfig") then
+    fs.makeDir("/mconfig")
+end
+
+if not fs.exists("/mconfig/hook.txt") then
+    config1 = fs.open("/mconfig/hook.txt", "w")
+    print("Please enter WEBHOOK url:\n(or 'false' to disable)")
+    input1 = io.read()
+    config1.write(input1)
+    config1.close()
+end
+if not fs.exists("/mconfig/id.txt") then
+    config2 = fs.open("/mconfig/id.txt", "w")
+    print("Please enter your discord ID:")
+    input2 = io.read()
+    config2.write(input2)
+    config2.close()
+end
+
+if fs.exists("/mconfig/hook.txt") then
+    config1 = fs.open("/mconfig/hook.txt", "r")
+    hookURL = config1.readAll()
+    if hookURL == "false" then
+        disablehook = true
+    else
+        local success, hook = DH.createWebhook(hookURL)
+        if not success then
+            error("Webhook connection failed! Reason: " .. hook)
+        end
+    end
+end
+
+if fs.exists("/mconfig/id.txt") then
+    config2 = fs.open("/mconfig/id.txt", "r")
+    dcID = config2.readAll()
 end
 
 logN = 1
@@ -40,7 +72,9 @@ function log(x)
     logfile = fs.open("/log/latest.txt", "a")
     logfile.write("["..logN.."] "..x.."\n")
     logfile.close()
-    hook.send("["..logN.."] "..x, "Mining Turtle "..os.getComputerID())
+    if disablehook ~= "false" then
+        hook.send("["..logN.."] "..x, "Mining Turtle "..os.getComputerID())
+    end
     logN = logN+1
 end
 function logcd(x)
@@ -302,6 +336,8 @@ if result1 == "y" then
                 os.sleep(1)
                 if turtle.getFuelLevel() < fuelmax/16 then
                     turtle.turnRight()
+                    if disablehook ~= "false" then
+                    hook.send("<@"..dcID.."> Your turtle with ID: "..os.getComputerID().." Has run out of fuel.")
                     os.reboot()
                 end
             end
