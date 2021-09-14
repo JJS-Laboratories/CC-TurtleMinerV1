@@ -71,6 +71,7 @@ if turtle.getItemDetail(15) ~= nil then
     end
 end
 
+if args[4] ~= "false" then
 repeat
     turtle.up()
     i1 = i1+1
@@ -79,5 +80,6 @@ until i1 == length
 turtle.back()
 if height > 2 then
     turtle.back()
+end
 end
 
