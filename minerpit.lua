@@ -61,15 +61,16 @@ repeat
         turtle.turnLeft()
     end
 until i == length
-
+i1 = 0
 if turtle.getItemDetail(15) ~= nil then
     if turtle.getItemDetail(15)["name"] == "minecraft:water_bucket" then
         turtle.select(15)
-        turtle.place()
+        turtle.up()
+        turtle.placeDown()
+        i1 = 1
     end
 end
 
-i1 = 0
 repeat
     turtle.up()
     i1 = i1+1
