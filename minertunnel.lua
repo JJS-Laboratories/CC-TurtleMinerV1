@@ -55,3 +55,17 @@ repeat
 until i1 == length
 
 turtle.down()
+
+print("Restart with same parameters? (to the right) (y/n)")
+
+result = io.read()
+
+if result == "y" then
+    turtle.turnRight()
+    turtle.up()
+    turtle.forward()
+    turtle.forward()
+    turtle.forward()
+    turtle.turnLeft()
+    shell.run("minertunnel", args[1], args[2], args[3])
+end
