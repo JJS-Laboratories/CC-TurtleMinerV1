@@ -120,7 +120,11 @@ repeat
     if args[2] ~= nil then
         if tonumber(args[2]) > 1 then
             reset()
-            turtle.up()
+            if args[1] == "up" then
+                turtle.up()
+            else
+                turtle.down()
+            end
             restart = true
         end
     else
