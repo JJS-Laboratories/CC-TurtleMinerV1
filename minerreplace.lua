@@ -40,10 +40,26 @@ function turn()
 end
 
 function insD()
-    if turtle.inspectDown() then
-        X1, X2 = turtle.inspectDown()
-        return X2
+    if args[1] == "down" then
+        if turtle.inspectDown() then
+            X1, X2 = turtle.inspectDown()
+            return X2
+        end
+    else
+        if turtle.inspectUp() then
+            X1, X2 = turtle.inspectUp()
+            return X2
+        end
     end
+end
+
+function insfix()
+    if args[1] == "down" then
+        X1, X2 = turtle.inspectDown()
+    else
+        X1, X2 = turtle.inspectUp()
+    end
+    return X1, X2
 end
 
 
