@@ -24,6 +24,7 @@ function start3()
         turtle.dig()
         turtle.forward()
         turtle.digUp()
+        turtle.placeDown()
         turtle.turnRight()
         turtle.up()
         if not turtle.inspectUp() then
