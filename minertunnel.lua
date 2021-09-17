@@ -73,4 +73,4 @@ if result == "y" then
     turtle.forward()
     turtle.turnLeft()
     shell.run("minertunnel", args[1], args[2], args[3])
-endturtle.down()
+end
