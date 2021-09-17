@@ -1,5 +1,10 @@
 local args = {...}
 
+if args[1] == nil then
+    print("Usage: minerreplace <up/down>")
+    return
+end
+
 turn1 = 0
 RX = 0
 RZ = 0
@@ -112,7 +117,7 @@ repeat
                 rs()
             end
         else
-            if turtle.inspectDown() == false then
+            if insfix() == false then
                 rs()
             end
         end
@@ -124,7 +129,7 @@ repeat
             rs()
         end
     else
-        if turtle.inspectDown() == false then
+        if insfix() == false then
             rs()
         end
     end

@@ -1,5 +1,10 @@
 local args = {...}
 
+if args[1] == nil then
+    print("Usage: minerwall <Replace? (true/false)>")
+    return
+end
+
 local replace1 = args[1]
 
 turn1 = 0

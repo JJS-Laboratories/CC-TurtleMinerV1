@@ -1,5 +1,10 @@
 local args = {...}
 
+if args[1] == nil then
+    print("Usage: minertunnel <length> <height(2-3)> <width(1-3)>")
+    return
+end
+
 local length = tonumber(args[1])
 local height = tonumber(args[2])
 local width = tonumber(args[3])
@@ -68,4 +73,4 @@ if result == "y" then
     turtle.forward()
     turtle.turnLeft()
     shell.run("minertunnel", args[1], args[2], args[3])
-end
+endturtle.down()

@@ -1,5 +1,10 @@
 local args = {...}
 
+if args[1] == nil then
+    print("Usage: minerpit2 <length> <width(1-3)> <height(1-3)>")
+    return
+end
+
 local length = tonumber(args[1])
 local height = tonumber(args[2])
 local width = tonumber(args[3])

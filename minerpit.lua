@@ -1,5 +1,10 @@
 local args = {...}
 
+if args[1] == nil then
+    print("Usage: minerpit <length> <width(1-3)> <height(1-3)>")
+    return
+end
+
 local length = tonumber(args[1])
 local height = tonumber(args[2])
 local width = tonumber(args[3])
@@ -12,6 +17,8 @@ print("Height(U/D):"..height)
 print("Width:(L/R)"..width)
 
 i = 0
+
+
 repeat
     i = i+1
     turtle.digDown()

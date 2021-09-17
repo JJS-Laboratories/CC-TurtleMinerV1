@@ -1,5 +1,10 @@
 local args = {...}
 
+if args[1] == nil then
+    print("Usage: minerlayer <up/down> [Repeat Amount (optional)]")
+    return
+end
+
 function reset()
 turn1 = 0
 RX = 0
